@@ -18,7 +18,7 @@ import { Spinner } from 'native-base';
 import configs from '../../../config';
 const axios = require('axios');
 
-import * as actionCrosswords from '../../redux/action';
+import * as actionInterview from '../../redux/action';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -71,6 +71,18 @@ class Register extends Component {
         })}
     }
 
+    // handleRegister = async () => {
+    //   if( this.state.inputUsername=="" || this.state.inputEmail=="" || this.state.inputPhone=="") {
+    //     alert("Lengkapi Form Terlebih dahulu")  
+    //   }else{ 
+    //     register = await this.props.register({ username: this.state.inputUsername, email: this.state.inputEmail, phone_number: this.state.inputPhone })
+    //     console.log(register)
+    //     if (register){
+    //       this.props.navigation.navigate('Home')
+    //     }
+    // }
+  
+    // }
 render(){
   const { navigate } = this.props.navigation;
   return(
@@ -173,7 +185,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    register: (value) => dispatch(actionCrosswords.register(value))
+    register: (value) => dispatch(actionInterview.register(value))
   }
 }
 

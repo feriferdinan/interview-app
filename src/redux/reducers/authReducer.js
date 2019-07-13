@@ -10,30 +10,6 @@ const initialState = {
 
 function auth(state = initialState, action) {
   switch (action.type) {
-    case types.LOGIN:
-      return {
-        ...state,
-        isLoading: false,
-      };
-    case "LOGIN_PENDING":
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case "LOGIN_FULFILLED":
-      return {
-        ...state,
-        isLoading: false,
-        saveToken: AsyncStorage.setItem('token', action.payload.data.token),
-        
-    };
-    case "LOGIN_REJECTED":
-      return {
-        ...state,
-        isLoading: false,
-        field: action.payload.response.data[0].field,
-        error: action.payload.response.data[0].message
-      };
     case types.REGISTER:
       return {
         ...state,
@@ -43,7 +19,8 @@ function auth(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data
+        data: action.payload.data,
+        saveToken: AsyncStorage.setItem('uid', action.payload.data.id)
       };
     case "REGISTER_REJECTED":
       return {

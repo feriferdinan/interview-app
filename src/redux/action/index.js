@@ -4,57 +4,34 @@ import config from "../../../config";
     
 import axios from 'axios';
 
-const token = AsyncStorage.getItem('token')
-let headerConfig = {
-    'Authorization': 'bearer ' + token
-}
 
-export const login = (value) => ({
-  type: types.LOGIN,
-  payload: axios({
-    method: "POST",
-    url: `http://${config.BASE_URL}:3333/api/auth/login`,
-    data: {
-      email: value.email,
-      password: value.password
-    }
-  })
-})
 export const register = (value) => ({
   type: types.REGISTER,
   payload: axios({
     method: "POST",
-    url: `http://${config.BASE_URL}:3333/api/users`,
+    url: `http://${config.BASE_URL}:3333/api/v1/user`,
     data: {
       username: value.username,
       email: value.email,
-      password: value.password
+      phone_number: value.phone_number
     }
   })
 });
-export const getMenu = (value) => ({
+
+export const getMenu = () => ({
   type: types.GETMENU,
   payload: axios({
     method: "GET",
-    url: `http://${config.BASE_URL}:3333/api/crosswords`,
-    headers : {
-      'Authorization' : `Bearer ${value.token}`}
+    url: `http://${configs.BASE_URL}:3333/api/v1/questions`,
   })
 });
 
-export const getBox = () => ({
-  type: types.GETBOX,
-  payload: axios({
-    method: "GET",
-    url: `http://${config.BASE_URL}/api/crosswords`
-  })
-});
 
 export const answer = () => ({
   type: types.ANSWER,
   payload: axios({
     method: "POST",
-    url: `http://${config.BASE_URL}/api/crosswords`,
+    url: `http://${configs.BASE_URL}:3333/api/v1/answer`,
     data: {
       value
     }
