@@ -65,7 +65,7 @@ import CountDown from 'react-native-countdown-component';
   }
 
   handleSubmit = () => {
-    if(this.state.answer=="") {
+    if(this.state.inputaAnswer=="") {
         alert("Isi Jawaban Dulu")  
       }else{ 
         axios.post(`http://${configs.BASE_URL}:3333/api/v1/answer`,{
@@ -112,7 +112,7 @@ import CountDown from 'react-native-countdown-component';
                 </View>
                 <TextInput 
                     multiline = {true}
-                    value={this.state.answer}
+                    value={this.state.answer=="" ? null :this.state.answer}
                     numberOfLines = {1}
                     autoFocus={(this.state.answer !=="") ? true : false}
                     placeholder="Ketik Jawaban Anda Disini" 

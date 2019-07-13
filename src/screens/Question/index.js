@@ -35,7 +35,6 @@ import { withNavigation } from 'react-navigation';
         </TouchableOpacity>
         </Right>
       </Header>
-    
   )
   }
   };

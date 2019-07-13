@@ -101,8 +101,8 @@ render(){
   alignItems:"center",}} >
 <StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />
   <View style={styles.wrapperForm} >
-    <Text style={styles.title}>Isi Biodata</Text>
-    <Text>Sebelum Melanjutkan Interview</Text>
+    <Text style={styles.title}>Halo Peserta </Text>
+    <Text>Isi Biodata Sebelum Melanjutkan Interview</Text>
     <View style={styles.inputBox} >
     <TextInput 
         value={this.state.inputUsername}
