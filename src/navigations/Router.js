@@ -8,9 +8,9 @@ import {
 import LoadingScreen from "../screens/Loading/Loading";
 import RegisterScreen from "../screens/Register/index";
 import HomeScreen from "../screens/Home/index";
-import CameraScreen from "../screens/Camera/index";
+import CameraScreen from "../screens/Question/QuestionVideo";
 import QuestionScreen from "../screens/Question/index";
-import AnswerScreen from "../screens/Answer/index";
+import AnswerScreen from "../screens/Question/QuestionText";
 
 
 

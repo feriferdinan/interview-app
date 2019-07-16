@@ -35,66 +35,41 @@ class Register extends Component {
             showPassword: true,
             isLoading:false
         }
-
-
     }
     
 
-    handleRegister =  () => {
-      if(this.state.inputUsername=="" || this.state.inputEmail=="" || this.state.inputPhone=="") {
+    handleRegister = async () => {
+      if( this.state.inputUsername=="" || this.state.inputEmail=="" || this.state.inputPhone=="") {
         alert("Lengkapi Form Terlebih dahulu")  
       }else{ 
-        this.setState({isLoading:true})
-        axios.post(`http://${configs.BASE_URL}:3333/api/v1/user`,{
-          "username" : this.state.inputUsername,
-          "email" : this.state.inputEmail,
-          "phone_number" : this.state.inputPhone
-        })
-          .then (res => {
-            console.log(res.data);
-            
-            if (res.data == null){
-              alert("Tidak Dapat Register")
-            }else{
-              this.setState({isLoading:false})
-            AsyncStorage.setItem('uid', JSON.stringify(res.data.id));
-              this.props.navigation.navigate('Home',{
-                "userId" :res.data.id,
-                "username" :res.data.username
-              })
-            }
+        register = await this.props.register({ username: this.state.inputUsername, email: this.state.inputEmail, phone_number: this.state.inputPhone })
+        console.log(this.props.auth.saveId)
+        if (this.props.auth.saveId!=null){
+          this.props.navigation.navigate('Home',{
+            "userId" :this.props.auth.data.id,
+            "username" :this.props.auth.data.username
           })
-        .catch(err =>{
-          console.log('erordi  sign in:',err)
-          this.setState({isLoading:false})
-          alert('Gagal Registrasi, Email Sudah Ada atau Pastikan Koneksi Anda Stabil')
-        })}
+        }
+        
     }
+  }
 
-    // handleRegister = async () => {
-    //   if( this.state.inputUsername=="" || this.state.inputEmail=="" || this.state.inputPhone=="") {
-    //     alert("Lengkapi Form Terlebih dahulu")  
-    //   }else{ 
-    //     register = await this.props.register({ username: this.state.inputUsername, email: this.state.inputEmail, phone_number: this.state.inputPhone })
-    //     console.log(register)
-    //     if (register){
-    //       this.props.navigation.navigate('Home')
-    //     }
-    // }
-  
-    // }
+
 render(){
+  
   const { navigate } = this.props.navigation;
+  const field = this.props.auth.field
   return(
-    (this.state.isLoading==true) 
+    (this.props.auth.isLoading==true) 
     ? 
     <View style={{flexGrow: 1,justifyContent:'center',alignItems: 'center'}}> 
-<StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />
-      <Spinner color='#517da2' style={{justifyContent:"center"}} />
-      <Text>Loading . . .</Text>
+      <StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />
+        <Spinner color='#517da2' style={{justifyContent:"center"}} />
+        <Text>Loading . . .</Text>
     </View>
     :
   <View style={styles.container}>
+  {(this.props.error)?alert('Gagal Registrasi, Email Sudah Ada atau Pastikan Koneksi Anda Stabil'):null}
    <LinearGradient colors={['#f2fcfe','#1c92d2']} style={{flex:1,width:"100%",
   justifyContent:"center",
   flexDirection:"column",
@@ -179,7 +154,7 @@ render(){
 
 const mapStateToProps = state => {
   return {
-    crosswords: state.crosswords
+    auth: state.auth
   }
 }
 

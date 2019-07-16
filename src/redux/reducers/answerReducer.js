@@ -1,39 +1,39 @@
 import * as types from './../types';
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 const initialState = {
   data: [],
-  error: null,
   isLoading: false,
+  saveId: ''
 }
 
-function menu(state = initialState, action) {
+function answer(state = initialState, action) {
   switch (action.type) {
-    case types.GETMENU:
+    case types.ANSWER:
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case "ANSWER_PENDING":
       return {
         ...state,
         isLoading: true,
       };
-      case "GETMENU_PENDING":
-        return {
-          ...state,
-          isLoading: true,
-        };
-    case "GETMENU_FULFILLED":
+    case "ANSWER_FULFILLED":
       return {
         ...state,
         isLoading: false,
-        data:  action.payload.data
+        data: action.payload.data,
       };
-    case "GETMENU_REJECTED":
+    case "ANSWER_REJECTED":
       return {
         ...state,
         isLoading: false,
         error: action.payload.message
       };
-    
+
     default:
       return state
   }
 }
 
-export default menu
+export default answer

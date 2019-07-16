@@ -2,37 +2,33 @@ import * as types from './../types';
 import { AsyncStorage } from 'react-native';
 const initialState = {
   data: [],
-  error: null,
-  field: null,
   isLoading: false,
-  saveId: ""
+  saveId: ''
 }
 
-function auth(state = initialState, action) {
+function question(state = initialState, action) {
   switch (action.type) {
-    case types.REGISTER:
+    case types.QUESTION:
       return {
         ...state,
         isLoading: false,
       };
-    case "REGISTER_PENDING":
+     case "QUESTION_PENDING":
       return {
         ...state,
         isLoading: true,
       };
-    case "REGISTER_FULFILLED":
+    case "QUESTION_FULFILLED":
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data,
-        saveId: AsyncStorage.setItem('uid', JSON.stringify(action.payload.data.id))
+        data:action.payload.data,
       };
-    case "REGISTER_REJECTED":
+    case "QUESTION_REJECTED":
       return {
         ...state,
         isLoading: false,
-        error: action.payload.message,
-      
+        error: action.payload.message
       };
 
     default:
@@ -40,4 +36,4 @@ function auth(state = initialState, action) {
   }
 }
 
-export default auth
+export default question

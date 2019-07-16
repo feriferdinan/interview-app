@@ -21,7 +21,7 @@ import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-m
 import { withNavigation } from 'react-navigation';
 const axios = require('axios');
 import configs from '../../../config'
-import * as actionCrosswords from '../../redux/action';
+import * as actionInterview from '../../redux/action';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -40,6 +40,9 @@ class HomeScreen extends Component {
     const userId = await navigation.getParam('userId');
     const username = await navigation.getParam('username');
     this.setState({ username: username })
+    uidx = await AsyncStorage.getItem('uid')
+    console.log(uidx);
+    
   }
 
 
@@ -101,7 +104,6 @@ class HomeScreen extends Component {
             </View>
             <Text style={{ textAlign: "center", margin: 20 }}>Silahkan Ikuti</Text>
             <TouchableOpacity
-              onPress={() => navigate('Camera')}
               style={{ backgroundColor: "#f4f3f4", margin: 10, padding: 30, width: "95%", borderRadius: 10, alignItems: "center" }} >
               <View style={{ flexDirection: "row" }}>
                 <View style={{ paddingHorizontal: 40, alignItems: "center" }} >
@@ -110,7 +112,7 @@ class HomeScreen extends Component {
                     size={100}
                     color="rgba(116,123,190,0.7)"
                   />
-                  <Text>8 Menit</Text>
+                  <Text>4 Menit</Text>
                 </View>
                 <View style={{ paddingHorizontal: 40, alignItems: "center" }} >
                   <Icon
@@ -143,7 +145,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getMenu: (value) => dispatch(actionCrosswords.getMenu(value))
+    getMenu: (value) => dispatch(actionInterview.getMenu(value))
   }
 }
 
@@ -164,9 +166,10 @@ const styles = StyleSheet.create({
     width: "90%",
     borderColor: '#517da2',
     borderRadius: 25,
-    marginVertical: 10,
+    marginVertical: 50,
     paddingVertical: 13,
-    borderWidth: 2
+    borderWidth: 2,
+   
   },
   buttonText: {
     fontSize: 16,
