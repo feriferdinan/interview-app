@@ -133,7 +133,7 @@ async componentDidMount() {
         </View>
         <View style={{right:0,position:"absolute",padding:6}} >
             <CountDown
-              until={99999 }
+              until={this.state.question.timer*60 }
               onFinish={this.nextQuestion}
               size={17}
               digitStyle={{backgroundColor: '#FFF',borderWidth:5,borderColor:"#517da2",borderRadius:10}}
@@ -148,13 +148,15 @@ async componentDidMount() {
           <ScrollView>
           <View style={{margin:10}}>
             <Text style={{color:"#000",fontSize:19}}>{this.state.question.description}</Text>
-          </View>        
+          </View>    
 			{
         (this.state.question.type=="multiple") ?
-          (<QuestionMultiple quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />)
+          <View style={styles.wrapperAnswer}>    
+          <QuestionMultiple quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+           </View>
           :
         (this.state.question.type=="text") ?
-          (<QuestionText quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />)
+          <QuestionText quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
           :
         (this.state.question.type=="multi") ?
           (<QuestionMulti quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />)
@@ -167,7 +169,6 @@ async componentDidMount() {
           :
         null
       }
-        
         </ScrollView>
         <View >
        
@@ -231,5 +232,16 @@ const styles = StyleSheet.create({
         textAlign:'center',
         paddingHorizontal:30
     },
+    wrapperAnswer:{
+    margin:5,
+    borderRadius:5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.30,
+    shadowRadius: 4.65,
+    elevation: 8,}
   
 })

@@ -35,13 +35,10 @@ import SelectMultiple from 'react-native-select-multiple'
         return (
         <View style={[ styles.container ]}>
          <ScrollView>        
-            {/* { */}
-                {/* (choice.length == 0) ? <View/> : */}
                 <SelectMultiple
                     items={choice}
                     selectedItems={selectedItems}
                     onSelectionsChange={this.onSelectionsChange} />
-             {/* } */}
         </ScrollView>
 	    </View>
     )
@@ -55,8 +52,7 @@ export default withNavigation(QuestionMultiple);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width:"100%",
-        height:"100%"
+        
     },
     
    
