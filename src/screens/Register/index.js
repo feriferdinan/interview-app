@@ -83,9 +83,10 @@ render(){
         value={this.state.inputUsername}
         placeholder="Masukan Nama Anda"
         placeholderTextColor = "grey"
-        returnKeyType = {"next"}
         autoFocus = {true}
-        onSubmitEditing={() => { this.secondTextInput }}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => { this.secondTextInput.focus(); }}
+        blurOnSubmit={false}
         onChangeText={(text)=>this.setState({
             inputUsername:text
         })}
@@ -101,9 +102,11 @@ render(){
     <TextInput 
         value={this.state.inputEmail}
         placeholder="Masukan Email Anda"
+        keyboardType = 'email-address'
         placeholderTextColor = "grey"
+        ref={(input) => { this.secondTextInput = input; }}
         returnKeyType = {"next"}
-        onSubmitEditing={() => { this.secondTextInput }}
+        onSubmitEditing={() => { this.phoneTextInput.focus(); }}
         onChangeText={(text)=>this.setState({
             inputEmail:text
         })}
@@ -118,10 +121,11 @@ render(){
     <View style={[styles.inputBox]} >
     <TextInput
         value={this.state.inputPhone}
-        keyboardType = 'numeric'
+        keyboardType = 'phone-pad'
         placeholder="Masukan No.Telepon"
-        ref={(input) => { this.secondTextInput = input; }}
+        ref={(input) => { this.phoneTextInput = input; }}
         returnKeyType = {"go"}
+        onSubmitEditing={this.handleRegister}
         placeholderTextColor = "grey"
         onChangeText={(text)=>this.setState({
             inputPhone:text

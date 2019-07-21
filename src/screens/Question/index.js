@@ -177,7 +177,7 @@ async componentDidMount() {
               style={styles.button}
               onPress={this.nextQuestion} 
             >
-            <Text style={styles.buttonText}>{(this.state.question_count !==this.state.question.number)?"Next Question" :"Save Question"}</Text>
+            <Text style={styles.buttonText}>{(this.state.question_count != this.state.question.number)?"Next Question" :"Save Answer and Exit"}</Text>
             </TouchableOpacity>
 			  </View>
         </View>

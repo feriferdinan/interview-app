@@ -9,7 +9,7 @@ export const register = (value) => ({
   type: types.REGISTER,
   payload: axios({
     method: "POST",
-    url: `http://${config.BASE_URL}:3333/api/v1/user`,
+    url: `${config.BASE_URL}/api/v1/user`,
     data: {
       username: value.username,
       email: value.email,
@@ -22,7 +22,7 @@ export const getQuestion = (number) => ({
   type: types.QUESTION,
   payload: axios({
     method: "GET",
-    url: `http://${config.BASE_URL}:3333/api/v1/question/${number}`,
+    url: `${config.BASE_URL}/api/v1/question/${number}`,
   })
 });
 
@@ -31,7 +31,7 @@ export const answer = (value) => ({
   type: types.ANSWER,
   payload: axios({
     method: "POST",
-    url: `http://${config.BASE_URL}:3333/api/v1/answer`,
+    url: `${config.BASE_URL}/api/v1/answer`,
     data: {
       user_id: value.user_id,
       question_id: value.question_id,
