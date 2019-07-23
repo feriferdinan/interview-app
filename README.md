@@ -16,7 +16,7 @@
 - [Contributors](#contributors)
 
 ## Related Project
-* <a href="https://github.com/feriferdinan/chat-app-backend-adonis">AdonisJs - Interview App RESTfull API</a>
+* <a href="https://github.com/feriferdinan/interview-api">AdonisJs - Interview App RESTfull API</a>
 
 ## Introduction
 Simplify the Interview Process using the Interview App, anytime, anywhere - Build With React Native and Adonis
