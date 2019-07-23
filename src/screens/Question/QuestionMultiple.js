@@ -16,7 +16,7 @@ import SelectMultiple from 'react-native-select-multiple'
          await this.props.quest.options.split(',').map((item, key) => {
             choice.push({label: item, value: key})
         })
-        await this.setState({choice:choice})
+         this.setState({choice:choice})
      }
 
      onSelectionsChange = (selectedItems) => {

@@ -3,14 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableOpacity,
-  FlatList,
-  Dimensions,
-  Alert,
-  ScrollView,
-  AsyncStorage,
-  StatusBar,
   ActivityIndicator
 } from "react-native"
 import { withNavigation } from 'react-navigation'
@@ -18,8 +11,6 @@ import { RNCamera } from 'react-native-camera'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 class index extends Component {
-
-
   constructor() {
     super()
     this.state = {
@@ -28,14 +19,9 @@ class index extends Component {
     }
   }
 
-
-
-
   takePicture = async function (camera) {
     const options = { quality: 0.5, base64: true }
-    const data = await camera.takePictureAsync(options)
-    //  eslint-disable-next-line
-    console.log(data.uri)
+    await camera.takePictureAsync(options)
   }
 
   stopRecording() {
@@ -44,15 +30,13 @@ class index extends Component {
 
   async startRecording() {
     this.setState({ recording: true })
-    // default to mp4 for android as codec is not set
     const { uri, codec = "mp4" } = await this.camera.recordAsync()
     this.setState({ recording: false, processing: true })
     this.props.ChangeState('attachment', uri)
+    this.props.nextQuestion()
     console.log(uri)
     this.setState({ processing: false })
   }
-
-
 
   render() {
     const { recording, processing } = this.state
@@ -84,14 +68,14 @@ class index extends Component {
         </View>
       )
     }
+    
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1, width: wp("100%"), height: 60, backgroundColor: "#fff" }} />
         <RNCamera
           ref={ref => {
             this.camera = ref
           }}
-          style={[styles.preview, styles.container]}
+          style={[styles.preview]}
           type={RNCamera.Constants.Type.front}
           permissionDialogTitle={"Permission to use camera"}
           permissionDialogMessage={
@@ -116,14 +100,16 @@ export default withNavigation((index))
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center"
   },
   preview: {
-    justifyContent: 'flex-end',
-    height: hp("40%"),
+    height: hp('49%'),
+    width: wp('49%'),
+    borderRadius: 20,
   },
   capture: {
     flex: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#aeaeaa',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,

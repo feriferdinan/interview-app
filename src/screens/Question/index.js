@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar,  ScrollView,  Text, TouchableOpacity, View,  StyleSheet,  AsyncStorage} from 'react-native'
+import { StatusBar, ScrollView, Text, TouchableOpacity, View, StyleSheet, AsyncStorage } from 'react-native'
 
 import { Icon } from "react-native-elements"
 import { Right, Left, Header } from "native-base"
@@ -25,8 +25,8 @@ class Question extends React.Component {
       answer: "",
       attachment: "",
       user_id: "",
-      submited:false,
-      isLoading:false
+      submited: false,
+      isLoading: false
     }
   }
 
@@ -54,14 +54,15 @@ class Question extends React.Component {
 
 
 
-  async componentDidMount() {
-    user_id = await AsyncStorage.getItem('uid')
+  async componentWillMount() {
+    await this.setState({isLoading:true})
     await this.props.getQuestion(this.state.number)
     await this.setState({
-      question: this.props.question.data.question[0],
+      question: this.props.question.data.question,
       question_count: this.props.question.data.question_count,
-      user_id: user_id
+      isLoading:false,
     })
+
   }
 
   _increment = async () => {
@@ -79,14 +80,14 @@ class Question extends React.Component {
       alert('Terimakasih Telah Berpartisipasi, Kami Akan Segera Mengabari Anda')
       await AsyncStorage.removeItem("uid")
       this.props.navigation.navigate('Register')
-      
+
     }
     await this.setState({
-      question: this.props.question.data.question[0],
+      question: this.props.question.data.question,
       answer: "",
       attachment: "",
-      submited:false,
-      isLoading:false
+      submited: false,
+      isLoading: false
     })
   }
 
@@ -106,19 +107,20 @@ class Question extends React.Component {
   }
 
   handleSubmit = async () => {
-    user_id = this.state.user_id
-      await this.setState({submited:true,isLoading:true})
-      answer = await this.props.answer({
-        user_id: user_id,
-        question_id: this.props.question.data.question[0].id,
-        answer: this.state.answer,
-        attachment: this.state.attachment
-      })
+    await this.setState({ submited: true, isLoading: true })
+    user_id = await AsyncStorage.getItem('uid')
+    await this.props.answer({
+      user_id: user_id,
+      question_id: this.props.question.data.question.id,
+      answer: this.state.answer,
+      attachment: this.state.attachment
+    })
   }
 
   render() {
+    const question = this.props.question.data.question
     return (
-      (this.state.isLoading || this.props.question.isLoading)
+      (this.state.isLoading == true || this.props.question.isLoading == true)
         ?
         <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
           <StatusBar barStyle='dark-content' backgroundColor="#f2fcfe" translucent={false} />
@@ -146,25 +148,25 @@ class Question extends React.Component {
               />
             </View>
           </View>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ margin: 10 }}>
               <Text style={{ color: "#000", fontSize: 19 }}>{this.state.question.description}</Text>
             </View>
             {
               (this.state.question.type == "multiple") ?
                 <View style={styles.wrapperAnswer}>
-                  <QuestionMultiple quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+                  <QuestionMultiple quest={question} ChangeState={this.ChangeState} />
                 </View>
                 :
                 (this.state.question.type == "text") ?
-                  <QuestionText quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+                  <QuestionText quest={question} ChangeState={this.ChangeState} />
                   :
                   (this.state.question.type == "multi") ?
-                    (<QuestionMulti quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />)
+                    (<QuestionMulti quest={question} ChangeState={this.ChangeState} />)
                     :
                     (this.state.question.type == "video") ?
                       (<View style={{ height: 450 }}>
-                        <QuestionVideo quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+                        <QuestionVideo quest={question} ChangeState={this.ChangeState} nextQuestion={this.nextQuestion} />
                       </View>
                       )
                       :
@@ -174,13 +176,17 @@ class Question extends React.Component {
           <View >
 
             <View style={styles.compose}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.nextQuestion}
-                disabled={(this.state.submited) ? true : false}
-              >
-                <Text style={styles.buttonText}>{(this.state.question_count != this.state.question.number) ? "Next Question" : "Save Answer and Exit"}</Text>
-              </TouchableOpacity>
+
+              {
+                (this.state.question.type == "video") ? null :
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={this.nextQuestion}
+                    disabled={(this.state.submited) ? true : false}
+                  >
+                    <Text style={styles.buttonText}>{(this.state.question_count != this.state.question.number) ? "Next Question" : "Save Answer and Exit"}</Text>
+                  </TouchableOpacity>
+              }
             </View>
           </View>
         </View>
@@ -192,6 +198,7 @@ const mapStateToProps = state => {
   return {
     question: state.question,
     answers: state.answer,
+    auth: state.auth
   }
 }
 

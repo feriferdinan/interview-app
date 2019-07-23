@@ -94,7 +94,7 @@ class HomeScreen extends Component {
           <View
             style={styles.boxInformation} >
             <View style={{ flexDirection: "row" }}>
-              <View style={{ paddingHorizontal: 40, alignItems: "center" }} >
+              <View style={{ paddingHorizontal: wp("11%"), alignItems: "center" }} >
                 <Icon
                   name="timer"
                   size={100}
@@ -102,7 +102,7 @@ class HomeScreen extends Component {
                 />
                 <Text>4 Menit</Text>
               </View>
-              <View style={{ paddingHorizontal: 40, alignItems: "center" }} >
+              <View style={{ paddingHorizontal: wp("11%"), alignItems: "center" }} >
                 <Icon
                   name="cloud-upload"
                   size={100}
@@ -169,15 +169,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(86,130,163,0)',
     flexDirection: "column",
     alignItems: "center",
-    borderRadius: 20,
-    padding: '2%',
+    padding: hp('2%'),
   },
   boxInformation: {
     backgroundColor: "#f4f3f4",
-    margin: 10,
-    padding: '4%',
-    width: wp("95%"),
-    borderRadius: 10,
+    margin: wp("2%"),
+    padding: wp('4%'),
+    width: wp("96%"),
+    borderRadius: hp("2%"),
     alignItems: "center"
   }
 })

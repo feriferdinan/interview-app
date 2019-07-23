@@ -22,7 +22,7 @@ export const getQuestion = (number) => ({
   type: types.QUESTION,
   payload: axios({
     method: "GET",
-    url: `${config.BASE_URL}/api/v1/question/${number}`,
+    url: `${config.BASE_URL}/api/v1/question?number=${number}`,
   })
 });
 

@@ -33,7 +33,8 @@ class Register extends Component {
             inputPhone:"",
             icEye: 'visibility-off',
             showPassword: true,
-            isLoading:false
+            isLoading:false,
+            submited: false,
         }
     }
     
@@ -42,27 +43,27 @@ class Register extends Component {
       if( this.state.inputUsername=="" || this.state.inputEmail=="" || this.state.inputPhone=="") {
         alert("Lengkapi Form Terlebih dahulu")  
       }else{ 
-        await this.setState({isLoading:true})
-        register = await this.props.register({ username: this.state.inputUsername, email: this.state.inputEmail, phone_number: this.state.inputPhone })
-        console.log(this.props.auth.saveId)
+        await this.props.register({ username: this.state.inputUsername, email: this.state.inputEmail, phone_number: this.state.inputPhone })
         if (this.props.auth.saveId!=null){
-          this.setState({isLoading:false})
           this.props.navigation.navigate('Home',{
             "userId" :this.props.auth.data.id,
             "username" :this.props.auth.data.username
           })
         }
+
         
     }
   }
 
 
 render(){
+  console.log(this.props);
+  
   return(
-    (this.state.isLoading || this.props.auth.isLoading ) 
+    ( this.props.auth.isLoading  ) 
     ? 
     <View style={{flexGrow: 1,justifyContent:'center',alignItems: 'center'}}> 
-      <StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />
+      <StatusBar  barStyle='dark-content' backgroundColor="#fff" translucent = {false} />
         <Spinner color='#517da2' style={{justifyContent:"center"}} />
         <Text>Loading . . .</Text>
     </View>
@@ -141,7 +142,8 @@ render(){
 
     <TouchableOpacity 
       style={styles.button}
-      onPress={this.handleRegister}>
+      onPress={this.handleRegister}
+      >
       <Text style={styles.buttonText}>Interview Sekarang</Text>
     </TouchableOpacity>
 
