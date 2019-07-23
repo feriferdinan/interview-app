@@ -1,189 +1,190 @@
-import React from 'react';
-import {StatusBar,Keyboard,ScrollView,Alert,Modal,Text,TouchableOpacity,View, ImageBackground, StyleSheet,FlatList,AsyncStorage,BackHandler,TextInput ,Button,TouchableHighlight,YellowBox} from 'react-native';
+import React from 'react'
+import { StatusBar,  ScrollView,  Text, TouchableOpacity, View,  StyleSheet,  AsyncStorage} from 'react-native'
 
-const axios = require('axios');
-import { Icon, ListItem  } from "react-native-elements";
-import configs from '../../../config'
-import { Right,Left,Header } from "native-base";
-import { withNavigation } from 'react-navigation';
-import * as actionInterview from '../../redux/action';
-import { connect } from 'react-redux';
-import { Spinner } from 'native-base';
-import CountDown from 'react-native-countdown-component';
+import { Icon } from "react-native-elements"
+import { Right, Left, Header } from "native-base"
+import { withNavigation } from 'react-navigation'
+import * as actionInterview from '../../redux/action'
+import { connect } from 'react-redux'
+import { Spinner } from 'native-base'
+import CountDown from 'react-native-countdown-component'
 
-import QuestionText  from './QuestionText'
-import QuestionMulti  from './QuestionMulti'
-import QuestionMultiple  from './QuestionMultiple'
-import QuestionVideo  from './QuestionVideo'
+import QuestionText from './QuestionText'
+import QuestionMulti from './QuestionMulti'
+import QuestionMultiple from './QuestionMultiple'
+import QuestionVideo from './QuestionVideo'
 
- class Question extends React.Component {
-  
-  constructor(){
+class Question extends React.Component {
+
+  constructor() {
     super()
-    this.state= {
-        question:"",
-        question_count:"",
-        number:1,
-        answer:"",
-        attachment:""
+    this.state = {
+      question: "",
+      question_count: "",
+      number: 1,
+      answer: "",
+      attachment: "",
+      user_id: ""
     }
   }
 
-  static navigationOptions  =  ({ navigation }) =>   {
+  static navigationOptions = ({ navigation }) => {
     return {
-    header: (
-      <Header style={{backgroundColor:'white'}} androidStatusBarColor='black'>
-        <Left>
-          <Text style={{fontSize: 20,fontWeight:'bold',width:190}}>
-            Question
+      header: (
+        <Header style={{ backgroundColor: 'white' }} androidStatusBarColor='black'>
+          <Left>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', width: 90 }}>
+              Question
           </Text>
-        </Left>
-        <Right>
-        <TouchableOpacity onPress={()=>navigation.navigate('Home')} >
-         <Icon 
-            name="close"
-            size={30}
-         />
-        </TouchableOpacity>
-        </Right>
-      </Header>
-  )
+          </Left>
+          <Right>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')} >
+              <Icon
+                name="close"
+                size={30}
+              />
+            </TouchableOpacity>
+          </Right>
+        </Header>
+      )
+    }
   }
-  };
 
- 
-  
-async componentDidMount() {
-   await this.props.getQuestion(this.state.number)
-   await this.setState({
-     question:this.props.question.data.question[0],
-     question_count:this.props.question.data.question_count
-  })
-  }
-  
-  _increment = async () => {
+
+
+  async componentDidMount() {
+    user_id = await AsyncStorage.getItem('uid')
+    await this.props.getQuestion(this.state.number)
     await this.setState({
-      number:this.state.number+1
+      question: this.props.question.data.question[0],
+      question_count: this.props.question.data.question_count,
+      user_id: user_id
     })
   }
-  
-  nextQuestion = async () =>{
+
+  _increment = async () => {
+    await this.setState({
+      number: this.state.number + 1
+    })
+  }
+
+  nextQuestion = async () => {
     await this.handleSubmit()
     await this._increment()
-    if(this.state.number <= this.props.question.data.question_count ){
-      await this.props.getQuestion(this.state.number)
-    }else{
+    if (this.state.number <= this.props.question.data.question_count) {
+      this.props.getQuestion(this.state.number)
+    } else {
       alert('Terimakasih Telah Berpartisipasi, Kami Akan Segera Mengabari Anda')
       await AsyncStorage.removeItem("uid")
       this.props.navigation.navigate('Register')
 
     }
     await this.setState({
-      question:this.props.question.data.question[0],
-      answer:"",
-      attachment:""
+      question: this.props.question.data.question[0],
+      answer: "",
+      attachment: ""
     })
   }
 
-  ChangeState = (state,  value) => {
+  ChangeState = (state, value) => {
     switch (state) {
       case "answer":
         this.setState({
-          answer:value
+          answer: value
         })
-        break;
+        break
       case "attachment":
         this.setState({
-          attachment:value
+          attachment: value
         })
-        break;
+        break
     }
   }
-  
+
   handleSubmit = async () => {
-    user_id = await AsyncStorage.getItem('uid')
-    if( this.state.inputaAnswer=="") {
-      alert("Lengkapi Form Terlebih dahulu")  
-    }else{ 
-      answer = await this.props.answer({ 
-        user_id: user_id ,
+    user_id = this.state.user_id
+    if (this.state.inputaAnswer == "") {
+      alert("Lengkapi Form Terlebih dahulu")
+    } else {
+      answer = await this.props.answer({
+        user_id: user_id,
         question_id: this.props.question.data.question[0].id,
         answer: this.state.answer,
-        attachment:this.state.attachment
+        attachment: this.state.attachment
       })
-  }
-}
-
-    render() {
-        const {navigate} = this.props.navigation
-        return (
-          (this.props.question.isLoading==true) 
-          ? 
-          <View style={{flexGrow: 1,justifyContent:'center',alignItems: 'center'}}> 
-            <StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />
-              <Spinner color='#517da2' style={{justifyContent:"center"}} />
-              <Text>Loading . . .</Text>
-          </View>
-          :
-        <View >
-        <StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />
-        <View style={{height:60,backgroundColor:"#517da2",flexDirection:"row"}}>
-        <View style={{alignItems:"flex-start"}}>
-        <Text style={{color:"#fff",fontSize:18,paddingHorizontal:10,paddingVertical:20}}>{"Question : "+this.state.question.number+" of "+this.state.question_count}</Text>
-        </View>
-        <View style={{right:0,position:"absolute",padding:6}} >
-            <CountDown
-              until={this.state.question.timer*60 }
-              onFinish={this.nextQuestion}
-              size={17}
-              digitStyle={{backgroundColor: '#FFF',borderWidth:5,borderColor:"#517da2",borderRadius:10}}
-              digitTxtStyle={{color: '#517da2'}}
-              timeToShow={['M', 'S']}
-              timeLabels={{m:null , s:null}}
-              separatorStyle={{color: '#fff',fontSize:40}}
-              showSeparator
-            />
-        </View>
-        </View>
-          <ScrollView>
-          <View style={{margin:10}}>
-            <Text style={{color:"#000",fontSize:19}}>{this.state.question.description}</Text>
-          </View>    
-			{
-        (this.state.question.type=="multiple") ?
-          <View style={styles.wrapperAnswer}>    
-          <QuestionMultiple quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
-           </View>
-          :
-        (this.state.question.type=="text") ?
-          <QuestionText quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
-          :
-        (this.state.question.type=="multi") ?
-          (<QuestionMulti quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />)
-          :
-        (this.state.question.type=="video") ?
-          (<View style={{height:450}}> 
-            <QuestionVideo quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
-          </View>
-          )
-          :
-        null
-      }
-        </ScrollView>
-        <View >
-       
-         <View style={styles.compose}>
-            <TouchableOpacity 
-              style={styles.button}
-              onPress={this.nextQuestion} 
-            >
-            <Text style={styles.buttonText}>{(this.state.question_count != this.state.question.number)?"Next Question" :"Save Answer and Exit"}</Text>
-            </TouchableOpacity>
-			  </View>
-        </View>
-      </View>
-      )
     }
+  }
+
+  render() {
+    const { navigate } = this.props.navigation
+    return (
+      (this.props.question.isLoading == true)
+        ?
+        <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <StatusBar barStyle='dark-content' backgroundColor="#f2fcfe" translucent={false} />
+          <Spinner color='#517da2' style={{ justifyContent: "center" }} />
+          <Text>Loading . . .</Text>
+        </View>
+        :
+        <View >
+          <StatusBar barStyle='dark-content' backgroundColor="#f2fcfe" translucent={false} />
+          <View style={{ height: 60, backgroundColor: "#517da2", flexDirection: "row" }}>
+            <View style={{ alignItems: "flex-start" }}>
+              <Text style={{ color: "#fff", fontSize: 18, paddingHorizontal: 10, paddingVertical: 20 }}>{"Question : " + this.state.question.number + " of " + this.state.question_count}</Text>
+            </View>
+            <View style={{ right: 0, position: "absolute", padding: 6 }} >
+              <CountDown
+                until={this.state.question.timer * 6000000000}
+                onFinish={this.nextQuestion}
+                size={17}
+                digitStyle={{ backgroundColor: '#FFF', borderWidth: 5, borderColor: "#517da2", borderRadius: 10 }}
+                digitTxtStyle={{ color: '#517da2' }}
+                timeToShow={['M', 'S']}
+                timeLabels={{ m: null, s: null }}
+                separatorStyle={{ color: '#fff', fontSize: 40 }}
+                showSeparator
+              />
+            </View>
+          </View>
+          <ScrollView>
+            <View style={{ margin: 10 }}>
+              <Text style={{ color: "#000", fontSize: 19 }}>{this.state.question.description}</Text>
+            </View>
+            {
+              (this.state.question.type == "multiple") ?
+                <View style={styles.wrapperAnswer}>
+                  <QuestionMultiple quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+                </View>
+                :
+                (this.state.question.type == "text") ?
+                  <QuestionText quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+                  :
+                  (this.state.question.type == "multi") ?
+                    (<QuestionMulti quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />)
+                    :
+                    (this.state.question.type == "video") ?
+                      (<View style={{ height: 450 }}>
+                        <QuestionVideo quest={this.props.question.data.question[0]} ChangeState={this.ChangeState} />
+                      </View>
+                      )
+                      :
+                      null
+            }
+          </ScrollView>
+          <View >
+
+            <View style={styles.compose}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={this.nextQuestion}
+              >
+                <Text style={styles.buttonText}>{(this.state.question_count != this.state.question.number) ? "Next Question" : "Save Answer and Exit"}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+    )
+  }
 }
 
 const mapStateToProps = state => {
@@ -203,38 +204,39 @@ const mapDispatchToProps = dispatch => {
 export default withNavigation(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Question));
+)(Question))
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    
-    compose: {
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        margin: 10,
-        backgroundColor:"transparent",
-        
-    },
-   
-      button: {
-        borderColor:'#517da2',
-        borderRadius: 25,
-        marginVertical: 10,
-        paddingVertical: 13,
-       borderWidth:2
-    },
-    buttonText: {
-        fontSize:16,
-        fontWeight:'100',
-        color:'#517da2',
-        textAlign:'center',
-        paddingHorizontal:30
-    },
-    wrapperAnswer:{
-    margin:5,
-    borderRadius:5,
+  container: {
+    flex: 1,
+  },
+
+  compose: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: 10,
+    backgroundColor: "transparent",
+
+  },
+
+  button: {
+    borderColor: '#517da2',
+    borderRadius: 25,
+    marginVertical: 10,
+    paddingVertical: "3%",
+    paddingHorizontal: '3%',
+    borderWidth: 2
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '100',
+    color: '#517da2',
+    textAlign: 'center',
+    paddingHorizontal: 30
+  },
+  wrapperAnswer: {
+    margin: 5,
+    borderRadius: 5,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -242,6 +244,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.30,
     shadowRadius: 4.65,
-    elevation: 8,}
-  
+    elevation: 8,
+  }
+
 })
