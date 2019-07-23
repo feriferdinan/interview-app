@@ -1,7 +1,7 @@
 <h1 align="center">:octocat: INTERVIEW APP :octocat:</h1>
 
   <p align="center">
-  <img  src=""/>
+  <img width="200" src="https://github.com/feriferdinan/interview-app/blob/master/src/assets/img/logoapp.png"/>
   </p>
   <p align="center">
   Built with React Native.
