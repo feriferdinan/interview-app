@@ -42,9 +42,11 @@ class Register extends Component {
       if( this.state.inputUsername=="" || this.state.inputEmail=="" || this.state.inputPhone=="") {
         alert("Lengkapi Form Terlebih dahulu")  
       }else{ 
+        await this.setState({isLoading:true})
         register = await this.props.register({ username: this.state.inputUsername, email: this.state.inputEmail, phone_number: this.state.inputPhone })
         console.log(this.props.auth.saveId)
         if (this.props.auth.saveId!=null){
+          this.setState({isLoading:false})
           this.props.navigation.navigate('Home',{
             "userId" :this.props.auth.data.id,
             "username" :this.props.auth.data.username
@@ -56,11 +58,8 @@ class Register extends Component {
 
 
 render(){
-  
-  const { navigate } = this.props.navigation;
-  const field = this.props.auth.field
   return(
-    (this.props.auth.isLoading==true) 
+    (this.state.isLoading || this.props.auth.isLoading ) 
     ? 
     <View style={{flexGrow: 1,justifyContent:'center',alignItems: 'center'}}> 
       <StatusBar  barStyle='dark-content' backgroundColor="#f2fcfe" translucent = {false} />

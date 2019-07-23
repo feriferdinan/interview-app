@@ -24,7 +24,9 @@ class Question extends React.Component {
       number: 1,
       answer: "",
       attachment: "",
-      user_id: ""
+      user_id: "",
+      submited:false,
+      isLoading:false
     }
   }
 
@@ -72,17 +74,19 @@ class Question extends React.Component {
     await this.handleSubmit()
     await this._increment()
     if (this.state.number <= this.props.question.data.question_count) {
-      this.props.getQuestion(this.state.number)
+      await this.props.getQuestion(this.state.number)
     } else {
       alert('Terimakasih Telah Berpartisipasi, Kami Akan Segera Mengabari Anda')
       await AsyncStorage.removeItem("uid")
       this.props.navigation.navigate('Register')
-
+      
     }
     await this.setState({
       question: this.props.question.data.question[0],
       answer: "",
-      attachment: ""
+      attachment: "",
+      submited:false,
+      isLoading:false
     })
   }
 
@@ -103,22 +107,18 @@ class Question extends React.Component {
 
   handleSubmit = async () => {
     user_id = this.state.user_id
-    if (this.state.inputaAnswer == "") {
-      alert("Lengkapi Form Terlebih dahulu")
-    } else {
+      await this.setState({submited:true,isLoading:true})
       answer = await this.props.answer({
         user_id: user_id,
         question_id: this.props.question.data.question[0].id,
         answer: this.state.answer,
         attachment: this.state.attachment
       })
-    }
   }
 
   render() {
-    const { navigate } = this.props.navigation
     return (
-      (this.props.question.isLoading == true)
+      (this.state.isLoading || this.props.question.isLoading)
         ?
         <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
           <StatusBar barStyle='dark-content' backgroundColor="#f2fcfe" translucent={false} />
@@ -134,7 +134,7 @@ class Question extends React.Component {
             </View>
             <View style={{ right: 0, position: "absolute", padding: 6 }} >
               <CountDown
-                until={this.state.question.timer * 6000000000}
+                until={this.state.question.timer * 60}
                 onFinish={this.nextQuestion}
                 size={17}
                 digitStyle={{ backgroundColor: '#FFF', borderWidth: 5, borderColor: "#517da2", borderRadius: 10 }}
@@ -177,6 +177,7 @@ class Question extends React.Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={this.nextQuestion}
+                disabled={(this.state.submited) ? true : false}
               >
                 <Text style={styles.buttonText}>{(this.state.question_count != this.state.question.number) ? "Next Question" : "Save Answer and Exit"}</Text>
               </TouchableOpacity>
