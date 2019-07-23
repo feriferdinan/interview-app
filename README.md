@@ -13,6 +13,7 @@
 - [Features](#features)
 - [Requirements](#requirements)
 - [Screenshots](#screenshots)
+- [Download Apk](#download-the-apk)
 - [Contributors](#contributors)
 
 ## Related Project
@@ -58,7 +59,8 @@ Simplify the Interview Process using the Interview App, anytime, anywhere - Buil
     <img width="200" src="https://github.com/feriferdinan/interview-app/blob/master/src/assets/img/ss/6.jpeg">
 </div>
 
-
+## Download the APK
+You can Download the APK <a href="https://drive.google.com/file/d/1-VckR9nybT6kITht1YPSrh7Q1RQmvlSc/view?usp=sharing">Here!</a>
 
 ## Contributors
 <center>
